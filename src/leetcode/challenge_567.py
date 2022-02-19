@@ -12,16 +12,20 @@ class Solution:
 
 
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        # Brute force way would be to check all permutations
-        # of s1 and see if each is in s2. Let's start there
+        """Checks if a permutation of s1 is present in s2.
 
-        N = len(s1)
-        sorted_s1 = ''.join(sorted(s1))
+        First, check if s1 is a subset of s2. If it isn't, short-circuit.
+        Next, we sort s1 and then generate N-length substrings from s2. We
+        sort the substrings. If there is a match, then s1 is included in s2
+        """
 
         c1, c2 = Counter(s1), Counter(s2)
         for letter, count in c1.items():
             if c2.get(letter, 0) < count:
                 return False
+
+        N = len(s1)
+        sorted_s1 = ''.join(sorted(s1))
 
         # need to generate chunks of letters that are
         # N letters long
