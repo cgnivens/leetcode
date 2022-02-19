@@ -5,10 +5,9 @@
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-from operator import attrgetter
 from utils import ListNode, generate_linked_list, linked_list_iterator
 from typing import List, Optional
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 class Solution:
