@@ -12,9 +12,9 @@ def generate_linked_list(lst: List[int]) -> Optional[ListNode]:
     if not lst:
         return None
 
-    last = ListNode(val=lst[-1])
+    last = ListNode(val=lst.pop())
 
-    for val in reversed(lst[:-1]):
+    for val in reversed(lst):
         node = ListNode(val, next=last)
         last = node
 
