@@ -26,14 +26,13 @@ class Solution:
             vals[node.val].append(node)
 
         try:
-            a = vals[min_val].pop()
+            first = vals[min_val].pop()
         except IndexError:
             return None
 
-        first = ListNode(a.val)
-
-        if a.next is not None:
-            vals[a.next.val].append(a.next)
+        if first.next is not None:
+            vals[first.next.val].append(first.next)
+            first.next = None
 
         node = first
 
@@ -49,20 +48,20 @@ class Solution:
 
         if prev is None:
             node, *nodes = vals.pop(min_val)
-            prev = ListNode(node.val)
+            prev = node
         else:
             nodes = vals.pop(min_val)
 
         for node in nodes:
-            current = ListNode(node.val)
-            prev.next = current
-            prev = current
+            prev.next = node
+            prev = node
 
             if not node.next:
                 continue
 
-            next = node.next
-            vals[next.val].append(next)
+            next_ = node.next
+            node.next = None # reset the value
+            vals[next_.val].append(next_)
 
         return prev, vals
 
