@@ -62,13 +62,15 @@ Our recursive iterator hits a recursion error. No worries, we can fix it. Let's 
 a cartesian product using itertools' product rather than rolling our own
 """
 from itertools import product
+import sys
+from operator import itemgetter
 
 
-def get_even_values(val):
+def get_even_values(val, min_=1):
     i = 0
     result = []
 
-    while not val % 2:
+    while (not val % 2) and val > min_:
         result.append((i, val))
         val /= 2
         i += 1
@@ -78,30 +80,22 @@ def get_even_values(val):
     return result
 
 
-def get_odd_values(val):
-    return [(i, val * (i + 1)) for i in range(2)]
-
-
-def score_move(move):
-    min_val, max_val = 99999999, -9999999
-    for count, value in move:
-        min_val = min((value, min_val))
-        max_val = max((value, max_val))
-
-    return (max_val - min_val)
+def get_odd_values(val, max_=sys.maxsize):
+    return [(i, val * (i + 1)) for i in range(2) if val * (i + 1) < max_]
 
 
 class Solution:
     def minimumDeviation(self, nums: List[int]) -> int:
         # This tabulates out all of the results
-        value_table = [get_even_values(val) if not val % 2 else get_odd_values(val) for val in nums]
+        max_val, min_val = max(nums), min(nums)
+        min_dev = max_val - min_val
 
-        min_dev = (max(nums) - min(nums))
+        value_table = [get_even_values(val, min_val) if not val % 2 else get_odd_values(val) for val in nums]
 
         # A naive way of generating all possible options here
-        for possibility in product(value_table):
-            deviation = score_move(possibility)
-            min_dev = min(deviation, min_dev)
+        for move in product(*value_table):
+            (_, min_val), (_, max_val) = min(move, key=itemgetter(1)), max(move, key=itemgetter(1))
+            min_dev = min((max_val - min_val), min_dev)
 
         return min_dev
 
