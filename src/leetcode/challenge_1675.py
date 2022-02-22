@@ -127,6 +127,7 @@ class Solution:
         smallest_even, largest_odd = get_bounds(nums)
 
         vals = nums[:smallest_even.index] + nums[largest_odd.index:]
+        outside = list(enumerate(nums[smallest_even.index:largest_odd.index]))
 
         min_dev = max_val - min_val
 
@@ -134,10 +135,12 @@ class Solution:
 
         # A naive way of generating all possible options here
         for move in product(*value_table):
+            move = list(move) + outside
             (_, min_val), (_, max_val) = min(move, key=itemgetter(1)), max(move, key=itemgetter(1))
             min_dev = min((max_val - min_val), min_dev)
 
-        return min_dev
+        return int(min_dev)
+        
 
 
 def run_tests():
